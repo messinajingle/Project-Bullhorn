@@ -12,21 +12,21 @@
         <header class="header">
             <div class="header-content">
                 <div class="header-title">
-                    <h1>Bullhorn Data Integration Project Plan</h1>
-                    <p class="subtitle">Daily Capacity: 2.5 hours/day (5.5 hours allocated to other projects)</p>
+                    <h1 id="project-title">Loading Project...</h1>
+                    <p class="subtitle" id="project-subtitle"></p>
                 </div>
                 <div class="header-metrics">
                     <div class="metric-card">
                         <span class="metric-label">Start Date</span>
-                        <span class="metric-value">Oct 30, 2025</span>
+                        <span class="metric-value" id="start-date-display">-</span>
                     </div>
                     <div class="metric-card">
                         <span class="metric-label">Est. Completion</span>
-                        <span class="metric-value">Nov 11, 2025</span>
+                        <span class="metric-value" id="end-date-display">-</span>
                     </div>
                     <div class="metric-card">
                         <span class="metric-label">Total Tasks</span>
-                        <span class="metric-value">17</span>
+                        <span class="metric-value" id="total-tasks-display">-</span>
                     </div>
                 </div>
             </div>
@@ -34,25 +34,25 @@
             <div class="progress-section">
                 <div class="progress-stats">
                     <div class="stat">
-                        <span class="stat-value complete">1</span>
+                        <span class="stat-value complete" id="complete-count">0</span>
                         <span class="stat-label">Complete</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-value in-progress">1</span>
+                        <span class="stat-value in-progress" id="in-progress-count">0</span>
                         <span class="stat-label">In Progress</span>
                     </div>
                     <div class="stat">
-                        <span class="stat-value not-started">15</span>
+                        <span class="stat-value not-started" id="not-started-count">0</span>
                         <span class="stat-label">Not Started</span>
                     </div>
                 </div>
                 <div class="progress-bar-container">
                     <div class="progress-bar-label">
                         <span>Overall Progress</span>
-                        <span id="overall-progress-percent">13%</span>
+                        <span id="overall-progress-percent">0%</span>
                     </div>
                     <div class="progress-bar">
-                        <div class="progress-fill" id="overall-progress-fill" style="width: 13%"></div>
+                        <div class="progress-fill" id="overall-progress-fill" style="width: 0%"></div>
                     </div>
                 </div>
             </div>
@@ -65,19 +65,19 @@
                     <h3>Project Statistics</h3>
                     <div class="stat-item">
                         <span class="stat-item-label">Total Hours</span>
-                        <span class="stat-item-value">24.17</span>
+                        <span class="stat-item-value" id="total-hours">-</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-item-label">Hours Completed</span>
-                        <span class="stat-item-value">3.17</span>
+                        <span class="stat-item-value" id="hours-completed">-</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-item-label">Hours Remaining</span>
-                        <span class="stat-item-value">21.00</span>
+                        <span class="stat-item-value" id="hours-remaining">-</span>
                     </div>
                     <div class="stat-item">
                         <span class="stat-item-label">Working Days</span>
-                        <span class="stat-item-value">9 days</span>
+                        <span class="stat-item-value" id="working-days">-</span>
                     </div>
                 </div>
 
@@ -88,26 +88,25 @@
 
                 <div class="stats-card">
                     <h3>Task Types</h3>
-                    <div class="task-type-legend">
-                        <div class="legend-item">
-                            <span class="legend-color" style="background-color: #3B82F6"></span>
-                            <span class="legend-label">Export (5)</span>
+                    <div class="task-type-legend" id="task-type-legend">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <div class="stats-card">
+                    <h3>Configuration</h3>
+                    <div class="config-info">
+                        <div class="config-item">
+                            <span class="config-label">Daily Capacity</span>
+                            <span class="config-value" id="daily-capacity">-</span>
                         </div>
-                        <div class="legend-item">
-                            <span class="legend-color" style="background-color: #10B981"></span>
-                            <span class="legend-label">Map (4)</span>
+                        <div class="config-item">
+                            <span class="config-label">Other Projects</span>
+                            <span class="config-value" id="other-projects">-</span>
                         </div>
-                        <div class="legend-item">
-                            <span class="legend-color" style="background-color: #F59E0B"></span>
-                            <span class="legend-label">Load (6)</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color" style="background-color: #8B5CF6"></span>
-                            <span class="legend-label">Setup (1)</span>
-                        </div>
-                        <div class="legend-item">
-                            <span class="legend-color" style="background-color: #6B7280"></span>
-                            <span class="legend-label">Other (1)</span>
+                        <div class="config-item">
+                            <span class="config-label">Current Date</span>
+                            <span class="config-value" id="current-date-display">-</span>
                         </div>
                     </div>
                 </div>
@@ -130,7 +129,7 @@
                 <section class="card gantt-section">
                     <div class="card-header">
                         <h2>Task Timeline</h2>
-                        <p class="card-subtitle">Sequential task execution with 2.5 hours/day capacity</p>
+                        <p class="card-subtitle" id="gantt-subtitle">Sequential task execution</p>
                     </div>
                     <div class="card-body">
                         <div id="gantt-container"></div>
@@ -201,6 +200,8 @@
         </div>
     </div>
 
+    <!-- Include PapaParse for CSV parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
 </body>

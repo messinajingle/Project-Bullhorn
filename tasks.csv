@@ -1,0 +1,18 @@
+Task,Hours_Estimate,Percent_Complete,Start_Date,End_Date,Duration_Days,Status,Notes,Type
+Establish Console Link,3,0.5,10/30/2025,10/30/2025,1,In Progress,Running into minor technical difficulties,Setup
+Export Users,0.16,1,Completed,Completed,0,Complete,User file sent to Russ to create Users,Export
+Load Users,1,1,Completed,Completed,1,Completed,Russ Created Users,Load
+Export Companies,0.5,0,10/31/2025,10/31/2025,1,Not Started,,Export
+Map Companies,2,0,10/31/2025,11/2/2025,1,Not Started,,Map
+Load Companies,2,0,11/3/2025,11/3/2025,1,Not Started,,Load
+Export Contacts,0.5,0,11/3/2025,11/3/2025,1,Not Started,,Export
+Map Contacts,2,0,11/4/2025,11/4/2025,1,Not Started,,Map
+Load Contacts,2,0,11/4/2025,11/5/2025,2,Not Started,,Load
+Export Jobs,0.5,0,11/5/2025,11/5/2025,1,Not Started,,Export
+Map Jobs,2,0,11/5/2025,11/6/2025,2,Not Started,,Map
+Load Jobs,2,0,11/6/2025,11/7/2025,2,Not Started,,Load
+Export Candidates,0.5,0,11/7/2025,11/7/2025,1,Not Started,,Export
+Map Candidates,2,0,11/7/2025,11/10/2025,2,Not Started,,Map
+Load Candidates,2,0,11/10/2025,11/11/2025,2,Not Started,,Load
+Export Candidate Files,1,0,11/11/2025,11/11/2025,2,Not Started,,Export
+Attach Candidate Files via console,1,0,11/11/2025,11/13/2025,5,Not Started,,Load

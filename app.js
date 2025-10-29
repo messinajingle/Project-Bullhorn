@@ -1,218 +1,196 @@
-// Project Data
-const projectData = {
-  name: 'Bullhorn Data Integration Workstream',
-  start_date: '2025-10-30',
-  end_date: '2025-11-11',
-  daily_capacity_hours: 2.5,
-  other_projects_hours: 5.5,
-  total_hours: 24.17,
-  hours_completed: 3.17,
-  hours_remaining: 21.0,
-  working_days_required: 9,
-  current_date: '2025-10-29'
+// Global variables to store project data
+let projectConfig = {};
+let tasks = [];
+let taskTypes = {};
+let currentFilter = 'all';
+let currentSort = 'start_date';
+let chart = null;
+
+// Task type color mapping
+const TYPE_COLORS = {
+  'Export': '#3B82F6',
+  'Map': '#10B981',
+  'Load': '#F59E0B',
+  'Setup': '#8B5CF6',
+  'Other': '#6B7280',
+  'Planning': '#EC4899',
+  'Testing': '#8B5CF6',
+  'Documentation': '#06B6D4'
 };
 
-const taskTypes = [
-  { name: 'Export', color: '#3B82F6', count: 5 },
-  { name: 'Map', color: '#10B981', count: 4 },
-  { name: 'Load', color: '#F59E0B', count: 6 },
-  { name: 'Setup', color: '#8B5CF6', count: 1 },
-  { name: 'Other', color: '#6B7280', count: 1 }
-];
-
-const tasks = [
-  {
-    task: 'Establish Console Link',
-    hours_estimate: 3.0,
-    percent_complete: 0.5,
-    start_date: '2025-10-30',
-    end_date: '2025-10-30',
-    duration_days: 1,
-    status: 'In Progress',
-    notes: 'Running into minor technical difficulties',
-    type: 'Setup'
-  },
-  {
-    task: 'Export Users',
-    hours_estimate: 0.17,
-    percent_complete: 1.0,
-    start_date: 'Completed',
-    end_date: 'Completed',
-    duration_days: 0,
-    status: 'Complete',
-    notes: 'User file sent to Russ to create Users',
-    type: 'Export'
-  },
-  {
-    task: 'Load Users',
-    hours_estimate: 1.0,
-    percent_complete: 0.0,
-    start_date: '2025-10-30',
-    end_date: '2025-10-30',
-    duration_days: 1,
-    status: 'Not Started',
-    notes: 'Russ creating users must be done before loading any additional data',
-    type: 'Load'
-  },
-  {
-    task: 'Export Companies',
-    hours_estimate: 0.5,
-    percent_complete: 0.0,
-    start_date: '2025-10-31',
-    end_date: '2025-10-31',
-    duration_days: 1,
-    status: 'Not Started',
-    notes: '',
-    type: 'Export'
-  },
-  {
-    task: 'Map Companies',
-    hours_estimate: 2.0,
-    percent_complete: 0.0,
-    start_date: '2025-10-31',
-    end_date: '2025-11-03',
-    duration_days: 1,
-    status: 'Not Started',
-    notes: '',
-    type: 'Map'
-  },
-  {
-    task: 'Load Companies',
-    hours_estimate: 2.0,
-    percent_complete: 0.0,
-    start_date: '2025-11-03',
-    end_date: '2025-11-03',
-    duration_days: 1,
-    status: 'Not Started',
-    notes: '',
-    type: 'Load'
-  },
-  {
-    task: 'Export Contacts',
-    hours_estimate: 0.5,
-    percent_complete: 0.0,
-    start_date: '2025-11-03',
-    end_date: '2025-11-03',
-    duration_days: 1,
-    status: 'Not Started',
-    notes: '',
-    type: 'Export'
-  },
-  {
-    task: 'Map Contacts',
-    hours_estimate: 2.0,
-    percent_complete: 0.0,
-    start_date: '2025-11-04',
-    end_date: '2025-11-04',
-    duration_days: 1,
-    status: 'Not Started',
-    notes: '',
-    type: 'Map'
-  },
-  {
-    task: 'Load Contacts',
-    hours_estimate: 2.0,
-    percent_complete: 0.0,
-    start_date: '2025-11-04',
-    end_date: '2025-11-05',
-    duration_days: 2,
-    status: 'Not Started',
-    notes: '',
-    type: 'Load'
-  },
-  {
-    task: 'Export Jobs',
-    hours_estimate: 0.5,
-    percent_complete: 0.0,
-    start_date: '2025-11-05',
-    end_date: '2025-11-05',
-    duration_days: 1,
-    status: 'Not Started',
-    notes: '',
-    type: 'Export'
-  },
-  {
-    task: 'Map Jobs',
-    hours_estimate: 2.0,
-    percent_complete: 0.0,
-    start_date: '2025-11-05',
-    end_date: '2025-11-06',
-    duration_days: 2,
-    status: 'Not Started',
-    notes: '',
-    type: 'Map'
-  },
-  {
-    task: 'Load Jobs',
-    hours_estimate: 2.0,
-    percent_complete: 0.0,
-    start_date: '2025-11-06',
-    end_date: '2025-11-07',
-    duration_days: 2,
-    status: 'Not Started',
-    notes: '',
-    type: 'Load'
-  },
-  {
-    task: 'Export Candidates',
-    hours_estimate: 0.5,
-    percent_complete: 0.0,
-    start_date: '2025-11-07',
-    end_date: '2025-11-07',
-    duration_days: 1,
-    status: 'Not Started',
-    notes: '',
-    type: 'Export'
-  },
-  {
-    task: 'Map Candidates',
-    hours_estimate: 2.0,
-    percent_complete: 0.0,
-    start_date: '2025-11-07',
-    end_date: '2025-11-10',
-    duration_days: 2,
-    status: 'Not Started',
-    notes: '',
-    type: 'Map'
-  },
-  {
-    task: 'Load Candidates',
-    hours_estimate: 2.0,
-    percent_complete: 0.0,
-    start_date: '2025-11-10',
-    end_date: '2025-11-11',
-    duration_days: 2,
-    status: 'Not Started',
-    notes: '',
-    type: 'Load'
-  },
-  {
-    task: 'Export Candidate Files',
-    hours_estimate: 1.0,
-    percent_complete: 0.0,
-    start_date: '2025-11-11',
-    end_date: '2025-11-11',
-    duration_days: 1,
-    status: 'Not Started',
-    notes: '',
-    type: 'Export'
-  },
-  {
-    task: 'Attach Candidate Files via console',
-    hours_estimate: 1.0,
-    percent_complete: 0.0,
-    start_date: '2025-11-11',
-    end_date: '2025-11-11',
-    duration_days: 1,
-    status: 'Not Started',
-    notes: '',
-    type: 'Load'
+// Initialize the application
+async function init() {
+  try {
+    // Load project configuration
+    await loadProjectConfig();
+    
+    // Load tasks from CSV
+    await loadTasksFromCSV();
+    
+    // Initialize all components
+    updateHeaderDisplay();
+    updateStatistics();
+    initCalendar();
+    initGantt();
+    initTaskTable();
+    initChart();
+    
+    // Setup event listeners
+    setupEventListeners();
+  } catch (error) {
+    console.error('Error initializing application:', error);
+    alert('Error loading project data. Please check the console for details.');
   }
-];
+}
+
+// Load project configuration from JSON file
+async function loadProjectConfig() {
+  try {
+    const response = await fetch('project-config.json');
+    projectConfig = await response.json();
+  } catch (error) {
+    console.error('Error loading project configuration:', error);
+    // Use default values if config file is missing
+    projectConfig = {
+      name: 'Project Dashboard',
+      daily_capacity_hours: 8,
+      other_projects_hours: 0,
+      current_date: new Date().toISOString().split('T')[0]
+    };
+  }
+}
+
+// Load tasks from CSV file
+async function loadTasksFromCSV() {
+  return new Promise((resolve, reject) => {
+    Papa.parse('tasks.csv', {
+      download: true,
+      header: true,
+      dynamicTyping: true,
+      skipEmptyLines: true,
+      complete: function(results) {
+        if (results.errors.length > 0) {
+          console.error('CSV parsing errors:', results.errors);
+        }
+        
+        // Process the parsed data
+        tasks = results.data.map(row => {
+          // Clean up the task object
+          const task = {
+            task: row.Task || row.task || '',
+            hours_estimate: parseFloat(row.Hours_Estimate || row.hours_estimate || 0),
+            percent_complete: parseFloat(row.Percent_Complete || row.percent_complete || 0),
+            start_date: row.Start_Date || row.start_date || '',
+            end_date: row.End_Date || row.end_date || '',
+            duration_days: parseInt(row.Duration_Days || row.duration_days || 0),
+            status: row.Status || row.status || 'Not Started',
+            notes: row.Notes || row.notes || '',
+            type: row.Type || row.type || 'Other'
+          };
+          
+          // Count task types
+          if (!taskTypes[task.type]) {
+            taskTypes[task.type] = 0;
+          }
+          taskTypes[task.type]++;
+          
+          return task;
+        });
+        
+        resolve();
+      },
+      error: function(error) {
+        console.error('Error loading CSV:', error);
+        reject(error);
+      }
+    });
+  });
+}
+
+// Update header display
+function updateHeaderDisplay() {
+  document.getElementById('project-title').textContent = projectConfig.name || 'Project Dashboard';
+  document.getElementById('project-subtitle').textContent = 
+    `Daily Capacity: ${projectConfig.daily_capacity_hours} hours/day` +
+    (projectConfig.other_projects_hours > 0 ? ` (${projectConfig.other_projects_hours} hours allocated to other projects)` : '');
+  
+  // Calculate project dates
+  const startDates = tasks
+    .filter(t => t.start_date && t.start_date !== 'Completed')
+    .map(t => new Date(t.start_date));
+  const endDates = tasks
+    .filter(t => t.end_date && t.end_date !== 'Completed')
+    .map(t => new Date(t.end_date));
+  
+  const projectStart = startDates.length > 0 ? new Date(Math.min(...startDates)) : new Date();
+  const projectEnd = endDates.length > 0 ? new Date(Math.max(...endDates)) : new Date();
+  
+  document.getElementById('start-date-display').textContent = formatDateFull(projectStart);
+  document.getElementById('end-date-display').textContent = formatDateFull(projectEnd);
+  document.getElementById('total-tasks-display').textContent = tasks.length;
+  
+  // Update task counts by status
+  const statusCounts = {
+    'Complete': 0,
+    'In Progress': 0,
+    'Not Started': 0
+  };
+  
+  tasks.forEach(task => {
+    if (statusCounts.hasOwnProperty(task.status)) {
+      statusCounts[task.status]++;
+    }
+  });
+  
+  document.getElementById('complete-count').textContent = statusCounts['Complete'];
+  document.getElementById('in-progress-count').textContent = statusCounts['In Progress'];
+  document.getElementById('not-started-count').textContent = statusCounts['Not Started'];
+  
+  // Update configuration display
+  document.getElementById('daily-capacity').textContent = `${projectConfig.daily_capacity_hours}h/day`;
+  document.getElementById('other-projects').textContent = `${projectConfig.other_projects_hours}h/day`;
+  document.getElementById('current-date-display').textContent = formatDateFull(new Date(projectConfig.current_date));
+  
+  // Update Gantt subtitle
+  document.getElementById('gantt-subtitle').textContent = 
+    `Sequential task execution with ${projectConfig.daily_capacity_hours} hours/day capacity`;
+}
+
+// Update project statistics
+function updateStatistics() {
+  const totalHours = tasks.reduce((sum, task) => sum + task.hours_estimate, 0);
+  const completedHours = tasks.reduce((sum, task) => sum + (task.hours_estimate * task.percent_complete), 0);
+  const remainingHours = totalHours - completedHours;
+  const workingDaysRequired = Math.ceil(remainingHours / projectConfig.daily_capacity_hours);
+  
+  document.getElementById('total-hours').textContent = totalHours.toFixed(2);
+  document.getElementById('hours-completed').textContent = completedHours.toFixed(2);
+  document.getElementById('hours-remaining').textContent = remainingHours.toFixed(2);
+  document.getElementById('working-days').textContent = `${workingDaysRequired} days`;
+  
+  // Update overall progress
+  const progressPercent = totalHours > 0 ? Math.round((completedHours / totalHours) * 100) : 0;
+  document.getElementById('overall-progress-percent').textContent = `${progressPercent}%`;
+  document.getElementById('overall-progress-fill').style.width = `${progressPercent}%`;
+  
+  // Update task type legend
+  const legendContainer = document.getElementById('task-type-legend');
+  legendContainer.innerHTML = '';
+  
+  Object.entries(taskTypes).forEach(([type, count]) => {
+    const legendItem = document.createElement('div');
+    legendItem.className = 'legend-item';
+    legendItem.innerHTML = `
+      <span class="legend-color" style="background-color: ${getTypeColor(type)}"></span>
+      <span class="legend-label">${type} (${count})</span>
+    `;
+    legendContainer.appendChild(legendItem);
+  });
+}
 
 // Utility Functions
 function parseDate(dateStr) {
-  if (!dateStr || dateStr === 'Completed') return null;
+  if (!dateStr || dateStr === 'Completed' || dateStr === 'TBD') return null;
   return new Date(dateStr);
 }
 
@@ -258,20 +236,42 @@ function getStatusClass(status) {
 }
 
 function getTypeColor(type) {
-  const typeObj = taskTypes.find(t => t.name === type);
-  return typeObj ? typeObj.color : '#6B7280';
+  return TYPE_COLORS[type] || TYPE_COLORS['Other'];
 }
 
 // Initialize Calendar
 function initCalendar() {
   const container = document.getElementById('calendar-container');
+  container.innerHTML = '';
   
-  // Create calendars for October and November 2025
-  const october = createMonthCalendar(2025, 9); // Month is 0-indexed
-  const november = createMonthCalendar(2025, 10);
+  // Determine which months to show based on task dates
+  const taskDates = tasks
+    .filter(t => t.start_date && t.start_date !== 'Completed')
+    .map(t => new Date(t.start_date))
+    .concat(tasks
+      .filter(t => t.end_date && t.end_date !== 'Completed')
+      .map(t => new Date(t.end_date))
+    );
   
-  container.appendChild(october);
-  container.appendChild(november);
+  if (taskDates.length === 0) {
+    // Show current and next month if no tasks
+    const now = new Date();
+    container.appendChild(createMonthCalendar(now.getFullYear(), now.getMonth()));
+    container.appendChild(createMonthCalendar(now.getFullYear(), now.getMonth() + 1));
+    return;
+  }
+  
+  const minDate = new Date(Math.min(...taskDates));
+  const maxDate = new Date(Math.max(...taskDates));
+  
+  // Show all months between min and max dates
+  let current = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+  const end = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
+  
+  while (current <= end) {
+    container.appendChild(createMonthCalendar(current.getFullYear(), current.getMonth()));
+    current.setMonth(current.getMonth() + 1);
+  }
 }
 
 function createMonthCalendar(year, month) {
@@ -313,7 +313,7 @@ function createMonthCalendar(year, month) {
   }
   
   // Days
-  const currentDate = parseDate(projectData.current_date);
+  const currentDate = parseDate(projectConfig.current_date);
   for (let day = 1; day <= daysInMonth; day++) {
     const date = new Date(year, month, day);
     const dayCell = document.createElement('div');
@@ -328,7 +328,7 @@ function createMonthCalendar(year, month) {
       dayCell.classList.add('has-tasks');
     }
     
-    if (date.toDateString() === currentDate.toDateString()) {
+    if (currentDate && date.toDateString() === currentDate.toDateString()) {
       dayCell.classList.add('current');
     }
     
@@ -354,17 +354,30 @@ function createMonthCalendar(year, month) {
 // Initialize Gantt Chart
 function initGantt() {
   const container = document.getElementById('gantt-container');
+  container.innerHTML = '';
+  
   const gantt = document.createElement('div');
   gantt.className = 'gantt-chart';
   
-  // Get date range
-  const startDate = parseDate(projectData.start_date);
-  const endDate = parseDate(projectData.end_date);
+  // Get date range from tasks
+  const validTasks = tasks.filter(t => t.start_date && t.start_date !== 'Completed');
+  if (validTasks.length === 0) {
+    container.innerHTML = '<p class="no-data">No tasks with dates to display</p>';
+    return;
+  }
+  
+  const startDates = validTasks.map(t => new Date(t.start_date));
+  const endDates = validTasks
+    .filter(t => t.end_date && t.end_date !== 'Completed')
+    .map(t => new Date(t.end_date));
+  
+  const projectStart = new Date(Math.min(...startDates));
+  const projectEnd = endDates.length > 0 ? new Date(Math.max(...endDates)) : new Date(projectStart);
   
   // Get all working days
   const workingDays = [];
-  let current = new Date(startDate);
-  while (current <= endDate) {
+  let current = new Date(projectStart);
+  while (current <= projectEnd) {
     if (!isWeekend(current)) {
       workingDays.push(new Date(current));
     }
@@ -383,9 +396,7 @@ function initGantt() {
   gantt.appendChild(header);
   
   // Create rows for each task
-  tasks.forEach(task => {
-    if (task.start_date === 'Completed') return;
-    
+  validTasks.forEach(task => {
     const row = document.createElement('div');
     row.className = 'gantt-row';
     
@@ -430,22 +441,8 @@ function initGantt() {
 }
 
 // Initialize Task Table
-let currentFilter = 'all';
-let currentSort = 'start_date';
-
 function initTaskTable() {
   renderTaskTable();
-  
-  // Add event listeners for filters
-  document.getElementById('status-filter').addEventListener('change', (e) => {
-    currentFilter = e.target.value;
-    renderTaskTable();
-  });
-  
-  document.getElementById('sort-by').addEventListener('change', (e) => {
-    currentSort = e.target.value;
-    renderTaskTable();
-  });
 }
 
 function renderTaskTable() {
@@ -524,12 +521,14 @@ function renderTaskTable() {
     
     // Start date
     const startCell = document.createElement('td');
-    startCell.textContent = task.start_date === 'Completed' ? 'Completed' : formatDateFull(parseDate(task.start_date));
+    startCell.textContent = task.start_date === 'Completed' ? 'Completed' : 
+      (task.start_date ? formatDateFull(parseDate(task.start_date)) : 'TBD');
     row.appendChild(startCell);
     
     // End date
     const endCell = document.createElement('td');
-    endCell.textContent = task.end_date === 'Completed' ? 'Completed' : formatDateFull(parseDate(task.end_date));
+    endCell.textContent = task.end_date === 'Completed' ? 'Completed' : 
+      (task.end_date ? formatDateFull(parseDate(task.end_date)) : 'TBD');
     row.appendChild(endCell);
     
     // Duration
@@ -554,13 +553,23 @@ function renderTaskTable() {
 function initChart() {
   const ctx = document.getElementById('taskTypeChart');
   
-  new Chart(ctx, {
+  // Destroy existing chart if it exists
+  if (chart) {
+    chart.destroy();
+  }
+  
+  // Prepare data
+  const labels = Object.keys(taskTypes);
+  const data = Object.values(taskTypes);
+  const colors = labels.map(type => getTypeColor(type));
+  
+  chart = new Chart(ctx, {
     type: 'doughnut',
     data: {
-      labels: taskTypes.map(t => t.name),
+      labels: labels,
       datasets: [{
-        data: taskTypes.map(t => t.count),
-        backgroundColor: taskTypes.map(t => t.color),
+        data: data,
+        backgroundColor: colors,
         borderWidth: 0
       }]
     },
@@ -644,12 +653,18 @@ function closeModal() {
   modal.classList.remove('active');
 }
 
-// Initialize Everything
-document.addEventListener('DOMContentLoaded', () => {
-  initCalendar();
-  initGantt();
-  initTaskTable();
-  initChart();
+// Setup event listeners
+function setupEventListeners() {
+  // Filter and sort
+  document.getElementById('status-filter').addEventListener('change', (e) => {
+    currentFilter = e.target.value;
+    renderTaskTable();
+  });
+  
+  document.getElementById('sort-by').addEventListener('change', (e) => {
+    currentSort = e.target.value;
+    renderTaskTable();
+  });
   
   // Modal close handlers
   document.getElementById('modal-close').addEventListener('click', closeModal);
@@ -658,12 +673,7 @@ document.addEventListener('DOMContentLoaded', () => {
       closeModal();
     }
   });
-  
-  // Calculate and update overall progress
-  const totalHours = tasks.reduce((sum, task) => sum + task.hours_estimate, 0);
-  const completedHours = tasks.reduce((sum, task) => sum + (task.hours_estimate * task.percent_complete), 0);
-  const progressPercent = Math.round((completedHours / totalHours) * 100);
-  
-  document.getElementById('overall-progress-percent').textContent = `${progressPercent}%`;
-  document.getElementById('overall-progress-fill').style.width = `${progressPercent}%`;
-});
+}
+
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', init);
